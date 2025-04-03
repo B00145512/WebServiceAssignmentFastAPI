@@ -87,12 +87,24 @@ def paginate(start_id: str, end_id: str):
 
 
 @app.get("/convert/{product_id}")
-def convert(product_id: str, price:float):
-    product = collection.find_one({"Product ID": product_id, "Price:": price})
-    api = "fxr_live_8ee9857d6b38492ea6c451478161ab7c2ceb"
-    url = requests.get("https://api.fxratesapi.com/latest?currencies=EUR&base=USD&amount={price}")
-    
+def convert(product_id: str):
+    product = collection.find_one({"Product ID": product_id})
+
+
+    r = requests.get("https://api.fxratesapi.com/latest?currencies=EUR&base=USD&amount={price}")
+
+    data = r.json()
+
+    rate = data['rates']['EUR']
+
+    price = product['Unit Price']
+
+    total = rate * price
+    print(total)
+
+    #convertAmount = r.json()
+    #new_convertAmount = convertAmount['data']['EUR']
 
 
     # Convert BSON to JSON correctly
-    return json.loads(dumps(product))
+    return json.loads(dumps({"total" : total}))
