@@ -71,6 +71,7 @@ def generate_pdf_report(results):
     pdf.output("API_Test_Report.pdf")
 
 if __name__ == '__main__':
+    unittest.main()
     loader = unittest.TestLoader()
     suite = loader.loadTestsFromTestCase(ApiTestCase)
     runner = unittest.TextTestRunner(verbosity=2)
@@ -79,12 +80,15 @@ if __name__ == '__main__':
     # Collect test result summary
     results = {}
     for test_case in suite:
-        test_name = test_case.id().split('.')[-1]  # Extract test method name
-        if any(fail[0].id().split('.')[-1] == test_name for fail in result.failures):
-            results[test_name] = "FAIL"
-        elif any(error[0].id().split('.')[-1] == test_name for error in result.errors):
-            results[test_name] = "ERROR"
+        if test_case is not None:
+            test_name = test_case.id().split('.')[-1]  # Extract test method name
+            if any(fail[0].id().split('.')[-1] == test_name for fail in result.failures):
+                results[test_name] = "FAIL"
+            elif any(error[0].id().split('.')[-1] == test_name for error in result.errors):
+                results[test_name] = "ERROR"
+            else:
+                results[test_name] = "PASS"
         else:
-            results[test_name] = "PASS"
-
+            print("Encountered a None test case!")
+    
     generate_pdf_report(results)
