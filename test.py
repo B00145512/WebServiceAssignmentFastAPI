@@ -75,13 +75,12 @@ if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
 
-    # Collect test result summary
     results = {}
     for test_case in suite:
-        test_name = test_case._testMethodName
-        if any(fail[0]._testMethodName == test_name for fail in result.failures):
+        test_name = test_case.id().split('.')[-1]
+        if any(fail[0].id().split('.')[-1] == test_name for fail in result.failures):
             results[test_name] = "FAIL"
-        elif any(error[0]._testMethodName == test_name for error in result.errors):
+        elif any(error[0].id().split('.')[-1] == test_name for error in result.errors):
             results[test_name] = "ERROR"
         else:
             results[test_name] = "PASS"
