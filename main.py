@@ -90,21 +90,11 @@ def paginate(start_id: str, end_id: str):
 def convert(product_id: str):
     product = collection.find_one({"Product ID": product_id})
 
-
     r = requests.get("https://api.fxratesapi.com/latest?currencies=EUR&base=USD&amount={price}")
-
     data = r.json()
-
     rate = data['rates']['EUR']
-
     price = product['Unit Price']
 
     total = rate * price
-    print(total)
-
-    #convertAmount = r.json()
-    #new_convertAmount = convertAmount['data']['EUR']
-
-
     # Convert BSON to JSON correctly
     return json.loads(dumps({"total" : total}))
