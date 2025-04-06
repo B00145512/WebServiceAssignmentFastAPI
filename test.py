@@ -50,6 +50,7 @@ class ApiTestCase(unittest.TestCase):
         response = requests.get(url)
 
         self.assertEqual(response.status_code, 200)
+
 class TestReportPDF(FPDF):
     def header(self):
         self.set_font('Arial', 'B', 12)
@@ -75,9 +76,10 @@ if __name__ == '__main__':
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
 
+    # Collect test result summary
     results = {}
     for test_case in suite:
-        test_name = test_case.id().split('.')[-1]
+        test_name = test_case.id().split('.')[-1]  # Extract test method name
         if any(fail[0].id().split('.')[-1] == test_name for fail in result.failures):
             results[test_name] = "FAIL"
         elif any(error[0].id().split('.')[-1] == test_name for error in result.errors):
