@@ -1,56 +1,19 @@
-API ENDPOINTS DOCUMENTATION
-==============================
-Generated on: 2025-04-06 23:28:16
+FastAPI API Endpoint Reference
 
-ENDPOINTS:
+    1. /                - Shows all available commands
+    2. /getSingleProduct/{product_id}
+                       - Returns a single product by ID
+    3. /getAll         - Returns all products in the database
+    4. /addNew/{product_id}/{name}/{price}/{quantity}/{description}
+                       - Adds a new product with given details
+    5. /deleteOne/{product_id}
+                       - Deletes product with specified ID
+    6. /startsWith/{letter}
+                       - Lists products starting with specified letter
+    7. /panginate/{start_id}/{end_id}
+                       - Returns products in a range
+    8. /convert/{product_id}
+                       - Converts price from USD to EUR
 
-• GET /
-  Summary: Read Root
-
-• GET /getSingleProduct/{product_id}
-  Summary: Getsingleproduct
-  Parameters:
-  - product_id (path): string (required)
-  - q (query):  
-
-• GET /getAll
-  Summary: Getall
-
-• GET /addNew/{product_id}/{name}/{price}/{quantity}/{description}
-  Summary: Addnew
-  Parameters:
-  - product_id (path): string (required)
-  - name (path): string (required)
-  - price (path): number (required)
-  - quantity (path): integer (required)
-  - description (path): string (required)
-
-• GET /deleteOne/{product_id}
-  Summary: Deleteone
-  Parameters:
-  - product_id (path): string (required)
-
-• GET /startsWith/{letter}
-  Summary: Startswith
-  Parameters:
-  - letter (path): string (required)
-
-• GET /panginate/{start_id}/{end_id}
-  Summary: Paginate
-  Parameters:
-  - start_id (path): string (required)
-  - end_id (path): string (required)
-
-• GET /convert/{product_id}
-  Summary: Convert
-  Parameters:
-  - product_id (path): string (required)
-
-
-API DOCUMENTATION:
-==============================
-For interactive API documentation, visit:
-1. FastAPI Docs: http://127.0.0.1:8000/docs
-2. ReDoc: http://127.0.0.1:8000/redoc
-
-For the OpenAPI schema: http://127.0.0.1:8000/openapi.json
+    ===========================================================
+    FastAPI Documentation found at: https://fastapi.tiangolo.com

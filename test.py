@@ -1,6 +1,9 @@
 import unittest
 import requests
 from fpdf import FPDF
+import os
+import zipfile
+from datetime import datetime
 
 class ApiTestCase(unittest.TestCase):
     def test_root_endpoint(self):
@@ -33,8 +36,8 @@ class ApiTestCase(unittest.TestCase):
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_panginate_endpoint(self):
-        url = "http://localhost:8000/panginate/AUTO005/AUTO012"
+    def test_paginate_endpoint(self):
+        url = "http://localhost:8000/paginate/AUTO005/AUTO012"
         response = requests.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -64,8 +67,50 @@ def TestReport(test_results, filename="TestCaseReport.pdf"):
 
 
         pdf.cell(0, 10, f'{test}: {result}', 0, 1)
-
     pdf.output(filename)
+
+def createDump():
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    dumpFolder = f"dumps/{timestamp}_DumpFolder"
+    zipFileName = f"dumps/database-{timestamp}.zip"
+    uri = "mongodb://root:example@localhost:27017/"
+
+
+    os.system(f"mongodump --uri={uri} --out={dumpFolder}")
+    with zipfile.ZipFile(zipFileName, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for foldername, subfolder, filenames in os.walk(dumpFolder):
+            for filename in filenames:
+                filepath = os.path.join(foldername, filename)
+                zipf.write(filepath, os.path.relpath(filepath, dumpFolder))
+
+    return zipFileName
+
+def createReadme():
+    content = """
+    FastAPI API Endpoint Reference
+
+    1. /                - Shows all available commands
+    2. /getSingleProduct/{product_id}
+                       - Returns a single product by ID
+    3. /getAll         - Returns all products in the database
+    4. /addNew/{product_id}/{name}/{price}/{quantity}/{description}
+                       - Adds a new product with given details
+    5. /deleteOne/{product_id}
+                       - Deletes product with specified ID
+    6. /startsWith/{letter}
+                       - Lists products starting with specified letter
+    7. /panginate/{start_id}/{end_id}
+                       - Returns products in a range
+    8. /convert/{product_id}
+                       - Converts price from USD to EUR
+
+    ===========================================================
+    FastAPI Documentation found at: https://fastapi.tiangolo.com
+    """.strip()
+
+    with open("README.txt", "w") as file:
+        file.write(content)
+
 
 if __name__ == '__main__':
 
@@ -86,3 +131,5 @@ if __name__ == '__main__':
             test_results[test_name] = "PASS"
     
     TestReport(test_results)
+    createDump()
+    createReadme()

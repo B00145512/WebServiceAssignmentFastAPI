@@ -24,7 +24,7 @@ def read_root():
             "/addNew/{product_id}/{name}/{price}/{quantity}/{description}":"makes new entry",
             "/deleteOne/{product_id}": "Removes specific product",
             "/startsWith/{letter}": "Gets products that start with letter",
-            "/panginate/{start_id}/{end_id}": "Gets range of product",
+            "/paginate/{start_id}/{end_id}": "Gets range of product",
             "/convert/{product_id}": "Coverts currency from $ to Euro"
             }
 
@@ -68,7 +68,6 @@ def deleteOne(product_id: str):
     collection.delete_one({"Product ID": product_id})
 
     return {"Successfully Deleted" : product_id}
-    
 
 
 @app.get("/startsWith/{letter}")
@@ -78,7 +77,7 @@ def startsWith(letter: str):
 
     return json.loads(products)
 
-@app.get("/panginate/{start_id}/{end_id}")
+@app.get("/paginate/{start_id}/{end_id}")
 def paginate(start_id: str, end_id: str):
 
     products = dumps(collection.find({"Product ID": {"$gte": start_id, "$lte": end_id}}))
